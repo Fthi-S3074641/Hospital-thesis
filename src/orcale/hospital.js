@@ -24,7 +24,6 @@ const Hospital = {
                 }
                 self.web3 = new Web3(self.web3Provider);
                 self.accounts = self.web3.eth.accounts;
-                // console.log(self.accounts, ': ssss');
                 console.log('My man: This is an unknown network.', netId);
                 return self.web3;
                 return self.accounts;
@@ -51,7 +50,7 @@ const Hospital = {
 
     accounts: () => {
         let self = this;
-        console.log(self.accounts, ' :meh');
+        // console.log(self.accounts, ' :meh');
         return self.accounts;
 
     },
@@ -65,25 +64,6 @@ const Hospital = {
         });
     },
 
-    registerH: (address, role) => {
-        let self = this;
-        return new Promise((resolve, reject) => {
-            axios({
-                method: post,
-                url: self.baseUrl+role,
-                data: {
-                    "$class": self.baseOrg+role,
-                    "personId": address,
-                    "name": role
-                }
-            })
-            .then(response => { return response })
-        })
-        .then(result => { resolve(response) })
-        .catch(error => { reject(error) })
-
-    },
-
     signIn: (address) => {
         let self = this;
         return new Promise((resolve, reject) => {
@@ -94,7 +74,7 @@ const Hospital = {
     },
 
     details: (address) => {
-// get all details balance and role
+        // get all details balance and role
     },
 
     balance: (address) => {
@@ -105,6 +85,7 @@ const Hospital = {
             .catch(error => { reject(error) })
         });
     },
+
     role: (address) => {
         let self = this;
         return new Promise((resolve, reject) => {
@@ -113,6 +94,7 @@ const Hospital = {
             .catch(error => { reject(error) })
         });
     },
+
     grant: (sender, target) => {
         let self = this;
         return new Promise((resolve, reject) => {
@@ -121,6 +103,7 @@ const Hospital = {
             .catch(error => { reject(error) })
         });
     },
+
     revoke: (sender, target) => {
         let self = this;
         return new Promise((resolve, reject) => {
@@ -129,14 +112,16 @@ const Hospital = {
             .catch(error => { reject(error) })
         });
     },
-    pay: (sender, target) => {
+
+    pay: (sender, target, amount) => {
         let self = this;
         return new Promise((resolve, reject) => {
-            self.instance.sendPayment(target, {from: sender, gas:3000000})
+            self.instance.sendPayment(target, amount, {from: sender, gas:3000000})
             .then(response => { resolve(response) })
             .catch(error => { reject(error) })
         });
     },
+
     check: (sender, target) => {
         let self = this;
         return new Promise((resolve, reject) => {
@@ -145,6 +130,7 @@ const Hospital = {
             .catch(error => { reject(error) })
         });
     },
+
     verify: (sender, target) => {
         let self = this;
         return new Promise((resolve, reject) => {
@@ -153,6 +139,7 @@ const Hospital = {
             .catch(error => { reject(error) })
         });
     },
+
     fire: (sender, target) => {
         let self = this;
         return new Promise((resolve, reject) => {
@@ -160,6 +147,96 @@ const Hospital = {
             .then(response => {resolve(response) })
             .catch(error => reject(error))
         });
+    },
+
+    add: (address, role) => {
+        let self = this;
+        return new Promise((resolve, reject) => {
+            axios.get('http://localhost:4000/register',{
+                params: {
+                    address: address,
+                    role: role
+                }
+            })
+            .then(response => { return response })
+            .then(result => { resolve(result) })
+            .catch(error => { reject(error) })
+        });
+    },
+
+    read: (sender, target) => {
+        let self = this;
+        return new Promise((resolve, reject) => {
+            axios.get('http://localhost:4000/readData', {
+                params: {
+                    doctor: sender,
+                    patient: target
+                  }
+            })
+            .then(response => { return response })
+                .then(result => { resolve(result.data) })
+                .catch(error => { console.log(error) })
+        });
+    },
+    
+    giveE: (sender, target, item) => {
+        let self = this;
+        return new Promise((resolve, reject) => {
+            axios.get('http://localhost:4000/writeE', {
+                params: {
+                    doctor: sender,
+                    patient: target,
+                    medication: item
+                }
+            })
+            .then(response => { return response })
+            .then(result => { resolve(result) })
+            .catch(error => { reject(error) })
+        });
+    },
+
+    giveR: (sender, target, item) => {
+        let self = this;
+        return new Promise((resolve, reject) => {
+            axios.get('http://localhost:4000/writeR', {
+                params: {
+                    pharmacy: sender,
+                    patient: target,
+                    medication: item
+                }
+            })
+            .then(response => { return response })
+            .then(result => { resolve(result) })
+            .catch(error => { reject(error) })
+        });
+    },
+    permissions: (userId, role) => {
+        let self = this;
+        return new Promise((resolve, reject) => {
+            axios.get('http://localhost:4000/permissions', {
+                params: {
+                    userId: userId,
+                    role: role
+                }
+            })
+            .then(resp => { return resp })
+            .then(result => { resolve(result) })
+            .catch(error => { reject(error) })
+        });
+    },
+    remove: (source,target) => {
+        let self = this;
+        return new Promise((resolve, reject) => {
+            axios.get('http://localhost:4000/revoke', {
+                params: {
+                    doctor: target,
+                    patient: source
+                }
+            })
+            .then(resp => { return resp })
+            .then(result => { resolve(result) })
+            .catch(error => { reject(error) })
+        })
     }
 };
 

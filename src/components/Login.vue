@@ -20,7 +20,6 @@ export default {
         message: null
       },
       id: null,
-      myAddress: null,
       accounts: ''
     }
   },

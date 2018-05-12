@@ -4,6 +4,10 @@ import Register from './../components/Register'
 import Dashboard from './../components/Dashboard'
 import Login from './../components/Login'
 
+import Permissions from './../components/Medical/Permissions'
+import Billing from './../components/Medical/Billing'
+import Data from './../components/Medical/Data'
+
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -21,7 +25,24 @@ export default new VueRouter({
         {
             path: '/dashboard',
             name: 'dashboard',
-            component: Dashboard
+            component: Dashboard,
+            children: [
+                {
+                path: 'permissions',
+                name: 'permissions',
+                component: Permissions
+                },
+                {
+                    path: 'billing',
+                    name: 'billing',
+                    component: Billing
+                },
+                {
+                    path: 'data',
+                    name: 'data',
+                    component: Data
+                }
+        ]
         }
     ]
 })

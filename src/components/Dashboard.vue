@@ -1,18 +1,26 @@
 
 <template>
   <div class="">
-<h4>{{ account.address }} : : {{ account.role }} : : {{ account.balance }}</h4>
+    <div class="header">
+<h4>Role: {{ account.role }} Address: {{ account.address }} Balance: {{ account.balance }}</h4>
+    </div>
 <br>
-<a href="#" v-if="isLoggedIn" @click="logout">Logout</a>
-<br>
-<h4> {{ accounts }}</h4>
+
+<ul>
+  <li><router-link class="link" to="/dashboard/permissions">Access control</router-link></li>
+  <li><router-link class="link" to="/dashboard/data">Medical data </router-link></li>
+  <li><router-link class="link" to="/dashboard/billing">Billing</router-link></li>
+  <li><a href="#" v-if="isLoggedIn" @click="logout">Logout</a></li>
+</ul>
+
+<router-view></router-view>
+<!-- <h4> {{ accounts }}</h4> -->
   </div>
 </template>
 
 
 <script>
 export default {
-  // probs: ['address'],
   data() {
     return {
       account: {
